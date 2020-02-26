@@ -35,5 +35,9 @@ export class RtcService {
     this.users.next([...this.users.getValue(), user]);
   }
   
+  public disconnectedUser(user: User): void {
+    const filteredUsers = this.users.getValue().filter(x => x.connectionId === user.connectionId);
+    this.users.next(filteredUsers);
+  }
 
 }
