@@ -75,5 +75,9 @@ export class RtcService {
       this.currentPeer.signal(signalObject);
     }
   }
+  
+  public sendMessage(message: string) {
+    this.currentPeer.send(message);
+  }
 
 }
