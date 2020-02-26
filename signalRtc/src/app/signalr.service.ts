@@ -52,6 +52,10 @@ export class SignalrService {
     });
 
     this.hubConnection.invoke('NewUser', currentUser);
-  }s
+  }
+
+  public sendSignalToUser(signal: string, user: string) {
+    this.hubConnection.invoke('SendSignal', signal, user);
+  }
 
 }
