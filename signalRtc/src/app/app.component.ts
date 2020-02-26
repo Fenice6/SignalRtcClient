@@ -5,6 +5,7 @@ import { SignalrService } from './signalr.service';
 import { PeerData } from 'src/models/peerData.interface';
 import { User } from 'src/models/user.interface';
 import { Signal } from 'src/models/signal.interface';
+import { ChatMessage } from 'src/models/messages.interface';
 
 @Component({
   selector: 'app-root',
@@ -24,6 +25,8 @@ export class AppComponent implements OnInit, OnDestroy {
   public dataString: string;
 
   public userVideo: string;
+
+  public messages: Array<ChatMessage>;
 
   public mediaError = (): void => { console.error(`Can't get user media`); };
 
@@ -75,6 +78,12 @@ export class AppComponent implements OnInit, OnDestroy {
     } catch (error) {
       console.error(`Can't join room, error ${error}`);
     }
+  }
+
+  public sendMessage() {
+    this.rtcService.sendMessage(this.dataString);
+    this.messages = [...this.messages, { own: true, message: this.dataString }];
+    this.dataString = null;
   }
 
   ngOnDestroy() {
