@@ -66,4 +66,14 @@ export class RtcService {
     return peer;
   }
 
+  public signalPeer(userId: string, signal: string, stream: any) {
+    const signalObject = JSON.parse(signal);
+    if (this.currentPeer) {
+      this.currentPeer.signal(signalObject);
+    } else {
+      this.currentPeer = this.createPeer(stream, userId, false);
+      this.currentPeer.signal(signalObject);
+    }
+  }
+
 }
