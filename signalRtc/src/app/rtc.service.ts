@@ -4,6 +4,8 @@ import { Instance } from 'simple-peer';
 import { PeerData } from 'src/models/peerData.interface';
 import { User } from 'src/models/user.interface';
 
+declare var SimplePeer: any;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -38,6 +40,30 @@ export class RtcService {
   public disconnectedUser(user: User): void {
     const filteredUsers = this.users.getValue().filter(x => x.connectionId === user.connectionId);
     this.users.next(filteredUsers);
+  }
+
+  public createPeer(stream, userId: string, initiator: boolean): Instance {
+    const peer = new SimplePeer({ initiator, stream });
+
+    peer.on('signal', data => {
+      const stringData = JSON.stringify(data);
+      this.onSignalToSend.next({ id: userId, data: stringData });
+    });
+
+    peer.on('stream', data => {
+      console.log('on stream', data);
+      this.onStream.next({ id: userId, data });
+    });
+
+    peer.on('connect', () => {
+      this.onConnect.next({ id: userId, data: null });
+    });
+
+    peer.on('data', data => {
+      this.onData.next({ id: userId, data });
+    });
+
+    return peer;
   }
 
 }
