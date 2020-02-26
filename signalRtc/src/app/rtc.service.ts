@@ -31,4 +31,9 @@ export class RtcService {
     this.users$ = this.users.asObservable();
   }
 
+  public newUser(user: User): void {
+    this.users.next([...this.users.getValue(), user]);
+  }
+  
+
 }
