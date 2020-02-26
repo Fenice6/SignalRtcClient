@@ -58,4 +58,9 @@ export class SignalrService {
     this.hubConnection.invoke('SendSignal', signal, user);
   }
 
+  public sayHello(userName: string, user: string): void {
+    this.hubConnection.invoke('HelloUser', userName, user);
+  }
+  
+
 }
