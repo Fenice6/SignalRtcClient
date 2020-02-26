@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Observable } from 'rxjs';
+import { RtcService } from '../rtc.service';
+import { User } from 'src/models/user.interface';
 
 @Component({
   selector: 'app-user-list',
@@ -7,9 +10,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserListComponent implements OnInit {
 
-  constructor() { }
+  @Output() userSelected: EventEmitter<User> = new EventEmitter();
 
-  ngOnInit(): void {
+  public users$: Observable<Array<User>>;
+
+  constructor(private rtcService: RtcService) { }
+
+  ngOnInit() {
+    this.users$ = this.rtcService.users$;
+  }
+
+  public userClicked(user: User) {
+    this.userSelected.emit(user);
   }
 
 }
