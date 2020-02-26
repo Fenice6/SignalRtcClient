@@ -62,6 +62,11 @@ export class AppComponent implements OnInit, OnDestroy {
       this.videoPlayer.nativeElement.play();
     }));
   }
+  
+  public onUserSelected(userInfo: User) {
+    const peer = this.rtcService.createPeer(this.stream, userInfo.connectionId, true);
+    this.rtcService.currentPeer = peer;
+  }
 
   ngOnDestroy() {
     this.subscriptions.unsubscribe();
