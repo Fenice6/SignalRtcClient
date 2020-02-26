@@ -62,10 +62,19 @@ export class AppComponent implements OnInit, OnDestroy {
       this.videoPlayer.nativeElement.play();
     }));
   }
-  
+
   public onUserSelected(userInfo: User) {
     const peer = this.rtcService.createPeer(this.stream, userInfo.connectionId, true);
     this.rtcService.currentPeer = peer;
+  }
+
+  public async saveUsername(): Promise<void> {
+    try {
+      await this.signalR.startConnection(this.currentUser);
+      this.stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+    } catch (error) {
+      console.error(`Can't join room, error ${error}`);
+    }
   }
 
   ngOnDestroy() {
