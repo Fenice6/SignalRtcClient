@@ -33,6 +33,8 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(private rtcService: RtcService, private signalR: SignalrService) { }
 
   ngOnInit() {
+    this.messages = new Array();
+
     this.subscriptions.add(this.signalR.newPeer$.subscribe((user: User) => {
       this.rtcService.newUser(user);
       this.signalR.sayHello(this.currentUser, user.connectionId);
@@ -55,6 +57,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }));
 
     this.subscriptions.add(this.rtcService.onData$.subscribe((data: PeerData) => {
+      this.messages = [...this.messages, { own: false, message: data.data }];
       console.log(`Data from user ${data.id}: ${data.data}`);
     }));
 
